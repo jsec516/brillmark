@@ -43,12 +43,12 @@ app.use(bodyParser.urlencoded({ extended: true }));
 /*------------------Routing Started ------------------------*/
 
 
-app.get('/test', function(req, res) {
+app.post('/send', cors(corsOptions), function(req, res) {
 	
-var fromEmail = new helper.Email('jahidul@brillmark.com');
-var toEmail = new helper.Email('info@brillmark.com');
+var fromEmail = new helper.Email(req.body.email);
+var toEmail = new helper.Email(process.env.email_to);
 var subject = 'Contact Support';
-var content = new helper.Content('text/plain', 'awesome message');
+var content = new helper.Content('text/plain', req.body.message);
 var mail = new helper.Mail(fromEmail, subject, toEmail, content);
  
 
@@ -69,7 +69,7 @@ sg.API(request, function (error, response) {
   return res.send(response);
 });
 });
-app.post('/send', cors(corsOptions), function(req,res){
+/*app.post('/send', cors(corsOptions), function(req,res){
 	/*sendmail({
 	    from: req.body.email,
 	    to: 'jahidul@brillmark.com, info@brillmark.com',
@@ -87,10 +87,10 @@ app.post('/send', cors(corsOptions), function(req,res){
 		}
 	    
 	    
-	});*/
+	});
 	
     
-});
+});*/
 
 /*--------------------Routing Over----------------------------*/
 
