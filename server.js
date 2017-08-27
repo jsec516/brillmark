@@ -47,7 +47,7 @@ app.post('/send', cors(corsOptions), function(req, res) {
 	
 var fromEmail = new helper.Email(req.body.email);
 var toEmail = new helper.Email(process.env.email_to);
-var subject = 'Contact Support';
+var subject = 'Brillmark website lead';
 var content = new helper.Content('text/plain', req.body.message);
 var mail = new helper.Mail(fromEmail, subject, toEmail, content);
  
