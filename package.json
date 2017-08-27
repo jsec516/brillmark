@@ -7,6 +7,7 @@
     "dotenv": "latest",
     "express": "latest",
     "nodemailer": "latest",
+    "sendgrid": "^5.2.2",
     "sendmail": "^1.2.0"
   }
 }
