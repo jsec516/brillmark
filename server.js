@@ -1,7 +1,8 @@
 var express=require('express');
 var nodemailer = require("nodemailer");
 var bodyParser = require('body-parser');
-var cors = require('cors')
+var cors = require('cors');
+const sendmail = require('sendmail')();
 var app=express();
 try {
   const envStat = require('fs').statSync('.env');
@@ -16,8 +17,9 @@ catch (e) {
   console.error('Failed to load env file', e);
 }
 
+
 var corsOptions = {
-  origin: 'http://brillmark.s3-website-us-west-1.amazonaws.com/',
+  origin: 'http://brillmark.s3-website-us-west-1.amazonaws.com',
   optionsSuccessStatus: 200 // some legacy browsers (IE11, various SmartTVs) choke on 204 
 }
 
@@ -40,23 +42,26 @@ var smtpTransport = nodemailer.createTransport({
 /*------------------Routing Started ------------------------*/
 
 
-app.post('/send',function(req,res){
-    var mailOptions={
-	from: '"'+req.body.name - req.body.phone +'" <'+req.body.email+'>',
-        to : "jahidul@funnelenvy.com",
-        subject : req.body.subject,
-        text : req.body.message
-    }
-    console.log(mailOptions);
-    smtpTransport.sendMail(mailOptions, function(error, response){
-     if(error){
-            console.log(error);
-        res.end("error");
-     }else{
-            console.log("Message sent: " + response.message);
-        res.end("sent");
-         }
-});
+app.post('/send', cors(corsOptions), function(req,res){
+	sendmail({
+	    from: req.body.email,
+	    to: 'jahidul@brillmark.com, info@brillmark.com',
+	    subject: 'contact',
+	    html: req.body.message,
+	  }, function(err, reply) {
+		if (err) {
+			console.log(err && err.stack);
+			res.end("error");
+			
+		} else {
+			console.dir(reply);
+			res.end("sent");
+
+		}
+	    
+	    
+	});
+    
 });
 
 /*--------------------Routing Over----------------------------*/
